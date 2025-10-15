@@ -114,6 +114,7 @@ function updateSessionPaid($con, $sessionId, $timePaid){
     
     $query = $con->prepare("UPDATE Session SET timePaid=:tp WHERE sessionId=:id");
     $query->bindValue(":tp", $timePaid);
+    $query->bindValue(":id", $sessionId);
 
     if($query->execute()){
         //Success
@@ -141,6 +142,7 @@ function updateSessionExit($con, $sessionId, $timeOut){
     
     $query = $con->prepare("UPDATE Session SET timeOut=:to WHERE sessionId=:id");
     $query->bindValue(":to", $timeOut);
+    $query->bindValue(":id", $sessionId);
 
     if($query->execute()){
         //Success
