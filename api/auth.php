@@ -2,7 +2,7 @@
 
 class Auth{
 
-    private $token = "ff9a60d899fa78607d7a530641b75e7871f7c72de442052cbe3b7cf40d44c5dc";
+    private $token = "7e7fe8897ec74c80b7151a3b347772933396ca9a56b80a061b1b4fec33e223ba";
 
     public function authenticate(){
 

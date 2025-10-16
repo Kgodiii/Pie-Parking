@@ -20,6 +20,9 @@ switch($requestMethod){
         if(isset($_GET["id"])){
             $transactionId = $_GET["id"];
             getTransactionById($con, $transactionId);
+        }elseif(isset($_GET["userid"])){
+            $userId = $_GET["userid"];
+            getTransactionsByUserId($con, $userId);
         }else{
             getAllTransactions($con);
         }
@@ -48,6 +51,29 @@ function getTransactionById($con, $transactionId){
     $query->execute();
 
     $response = $query->fetch(PDO::FETCH_ASSOC);
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
+function getTransactionsByUserId($con, $userId){
+    $query = $con->prepare("SELECT * FROM Transactions WHERE userId=:id");
+    $query->bindValue(":id", $userId);
+    $query->execute();
+
+    $response = array();
+
+    if($query->rowCount() > 0){
+
+        while($row = $query->fetch(PDO::FETCH_ASSOC)){
+
+            $row["amount"] = (float)$row["amount"];
+            $row["amount"] = number_format($row["amount"], 2, '.', '');
+
+            array_push($response, $row);
+        }
+
+    }
 
     header('Content-Type: application/json');
     echo json_encode($response);
