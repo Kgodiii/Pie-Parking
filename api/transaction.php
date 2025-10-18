@@ -29,12 +29,12 @@ switch($requestMethod){
         break;
     case "POST":
         $data = json_decode(file_get_contents('php://input'), true);
-        insertTransaction($con, $data["gatewayId"], $data["amount"], $data["sessionId"]);
+        insertTransaction($con, $data["gatewayId"], $data["amount"], $data["sessionId"], $data["userId"]);
         break;
     case "PUT":
         $transactionId = $_GET["id"];
         $data = json_decode(file_get_contents('php://input'), true);
-        updateTransaction($con, $transactionId, $data["gatewayId"], $data["amount"], $data["sessionId"]);
+        updateTransaction($con, $transactionId, $data["gatewayId"], $data["amount"], $data["sessionId"], $data["userId"]);
         break;
     case "DELETE":
         $transactionId = $_GET["id"];
@@ -101,17 +101,18 @@ function getAllTransactions($con){
     echo json_encode($response);
 }
 
-function insertTransaction($con, $gatewayId, $amount, $sessionId){
+function insertTransaction($con, $gatewayId, $amount, $sessionId, $userId){
 
     global $errorArray;
 
     verifyProductPrice($amount);
 
     if(empty($errorArray)){
-        $query = $con->prepare("INSERT INTO Transactions (gatewayId, amount, sessionId) VALUES (:gi, :am, :si)");
+        $query = $con->prepare("INSERT INTO Transactions (gatewayId, amount, sessionId, userId) VALUES (:gi, :am, :si, :ui)");
         $query->bindValue(":gi", $gatewayId);
         $query->bindValue(":am", $amount);
         $query->bindValue(":si", $sessionId);
+        $query->bindValue(":ui", $userId);
 
         if($query->execute()){
             //Success
@@ -142,17 +143,18 @@ function insertTransaction($con, $gatewayId, $amount, $sessionId){
 
 }
 
-function updateTransaction($con, $transactionId, $gatewayId, $amount, $sessionId){
+function updateTransaction($con, $transactionId, $gatewayId, $amount, $sessionId, $userId){
 
     global $errorArray;
 
     verifyProductPrice($amount);
 
     if(empty($errorArray)){
-        $query = $con->prepare("UPDATE Transactions SET gatewayId=:gi, amount=:am, sessionId=:si WHERE transactionId=:id");
+        $query = $con->prepare("UPDATE Transactions SET gatewayId=:gi, amount=:am, sessionId=:si, userId=:ui WHERE transactionId=:id");
         $query->bindValue(":gi", $gatewayId);
         $query->bindValue(":am", $amount);
         $query->bindValue(":si", $sessionId);
+        $query->bindValue(":ui", $userId);
         $query->bindValue(":id", $transactionId);
 
         if($query->execute()){
