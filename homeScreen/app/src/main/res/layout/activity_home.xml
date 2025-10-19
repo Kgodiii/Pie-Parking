@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <!-- Top bar with logo + menu -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="space_between"
+        android:paddingBottom="16dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:contentDescription="App Logo" />
+
+        <ImageView
+            android:id="@+id/menuIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_more"
+            android:contentDescription="Menu" />
+    </LinearLayout>
+
+    <!-- QR Scanner Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#EEEEEE"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:text="SCAN TO ENTER"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:text="It's That Easy…"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- Steps -->
+    <TextView
+        android:text="1. Scan the QR on the Gate"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:text="2. Shop without stress, no paper ticket"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:text="3. Skip the queue, no need for cash… Pay in the app"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Pay Now Button -->
+    <Button
+        android:id="@+id/payNowButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pay Now"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:background="#6200EE" />
+
+</LinearLayout>
