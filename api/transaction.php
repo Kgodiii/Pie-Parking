@@ -57,7 +57,7 @@ function getTransactionById($con, $transactionId){
 }
 
 function getTransactionsByUserId($con, $userId){
-    $query = $con->prepare("SELECT * FROM Transactions WHERE userId=:id");
+    $query = $con->prepare("SELECT Transactions.transactionId as transactionId, Location.locationName as locationName, Transactions.datePaid as datePaid, Transactions.amount as amount FROM Transactions INNER JOIN Location ON Transactions.locationId=Location.locationId WHERE Transactions.userId=:id");
     $query->bindValue(":id", $userId);
     $query->execute();
 
