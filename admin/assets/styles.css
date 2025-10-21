@@ -36,6 +36,17 @@ h3 {
     font-family: "Poppins ExtraLight";
 }
 
+.errorMessage{
+    padding: 4px;
+    border-radius: 6px;
+    background-color: #ff5751;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
 .userInput{
     padding: 6px;
     border: none;
@@ -98,6 +109,7 @@ h3 {
 .card form{
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .card form input{

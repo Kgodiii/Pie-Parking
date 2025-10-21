@@ -15,12 +15,12 @@ class Account{
         $this->validateLoginUsername($username);
 
         if(empty($this->errorArray)){
-            $query = $this->con->prepare("SELECT * FROM adminUsers WHERE username=:un AND password=:pw");
+            $query = $this->con->prepare("SELECT * FROM AdminUsers WHERE username=:un AND password=:pw");
             $query->bindValue(":un", $username);
             $query->bindValue(":pw", $password);
             $query->execute();
 
-            if($query->rowCount() !== 1){
+            if($query->rowCount() == 1){
                 $_SESSION["userLoggedIn"] = $username;
                 return true;
             }
@@ -37,14 +37,14 @@ class Account{
 			array_push($this->errorArray, Errors::$usernameLength);
             return;
 		}
-        elseif(preg_match($pattern, $username)){
+        elseif(!preg_match($pattern, $username)){
             array_push($this->errorArray, Errors::$usernameCharacters);
         }
     }
 
     private function validateUsername($username){
 
-        $query = $this->con->prepare("SELECT * FROM adminUsers WHERE username=:un");
+        $query = $this->con->prepare("SELECT * FROM AdminUsers WHERE username=:un");
         $query->bindValue(":un", $username);
         $query->execute();
 
@@ -61,6 +61,12 @@ class Account{
             array_push($this->errorArray, Errors::$usernameCharacters);
         }
     }
+
+    public function getError($error){
+		if(in_array($error, $this->errorArray)){
+			return "<span class='errorMessage'>$error</span>";
+		}
+	}
 
 }
 
