@@ -26,12 +26,12 @@ switch($requestMethod){
         break;
     case "POST":
         $data = json_decode(file_get_contents('php://input'), true);
-        insertUser($con, $data["name"], $data["surname"], $data["cellNumber"]);
+        insertUser($con, $data["name"], $data["surname"], $data["cellNumber"], $data["password"]);
         break;
     case "PUT":
         $userId = $_GET["id"];
         $data = json_decode(file_get_contents('php://input'), true);
-        updateUser($con, $userId, $data["name"], $data["surname"], $data["cellNumber"]);
+        updateUser($con, $userId, $data["name"], $data["surname"], $data["cellNumber"], $data["password"]);
         break;
     case "DELETE":
         $userId = $_GET["id"];
@@ -71,7 +71,7 @@ function getAllUsers($con){
     echo json_encode($response);
 }
 
-function insertUser($con, $name, $surname, $cellNumber){
+function insertUser($con, $name, $surname, $cellNumber, $password){
 
     global $errorArray;
 
@@ -80,10 +80,11 @@ function insertUser($con, $name, $surname, $cellNumber){
     verifyCell($cellNumber);
 
     if(empty($errorArray)){
-        $query = $con->prepare("INSERT INTO Users (name, surname, cellNumber) VALUES (:nm, :sn, :cn)");
+        $query = $con->prepare("INSERT INTO Users (name, surname, cellNumber, password) VALUES (:nm, :sn, :cn, :pw)");
         $query->bindValue(":nm", $name);
         $query->bindValue(":sn", $surname);
         $query->bindValue(":cn", $cellNumber);
+        $query->bindValue(":pw", $password);
 
         if($query->execute()){
             //Success
@@ -114,7 +115,7 @@ function insertUser($con, $name, $surname, $cellNumber){
 
 }
 
-function updateUser($con, $userId, $name, $surname, $cellNumber){
+function updateUser($con, $userId, $name, $surname, $cellNumber, $password){
 
     global $errorArray;
 
@@ -123,10 +124,11 @@ function updateUser($con, $userId, $name, $surname, $cellNumber){
     verifyCell($cellNumber);
 
     if(empty($errorArray)){
-        $query = $con->prepare("UPDATE Users SET name=:nm, surname=:sn, cellNumber=:cn WHERE userId=:id");
+        $query = $con->prepare("UPDATE Users SET name=:nm, surname=:sn, cellNumber=:cn, password=:pw WHERE userId=:id");
         $query->bindValue(":nm", $name);
         $query->bindValue(":sn", $surname);
         $query->bindValue(":cn", $cellNumber);
+        $query->bindValue(":pw", $password);
         $query->bindValue(":id", $userId);
 
         if($query->execute()){

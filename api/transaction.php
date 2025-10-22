@@ -29,12 +29,12 @@ switch($requestMethod){
         break;
     case "POST":
         $data = json_decode(file_get_contents('php://input'), true);
-        insertTransaction($con, $data["gatewayId"], $data["amount"], $data["sessionId"]);
+        insertTransaction($con, $data["gatewayId"], $data["amount"], $data["sessionId"], $data["userId"], $data["locationId"]);
         break;
     case "PUT":
         $transactionId = $_GET["id"];
         $data = json_decode(file_get_contents('php://input'), true);
-        updateTransaction($con, $transactionId, $data["gatewayId"], $data["amount"], $data["sessionId"]);
+        updateTransaction($con, $transactionId, $data["gatewayId"], $data["amount"], $data["sessionId"], $data["userId"], $data["locationId"]);
         break;
     case "DELETE":
         $transactionId = $_GET["id"];
@@ -57,7 +57,7 @@ function getTransactionById($con, $transactionId){
 }
 
 function getTransactionsByUserId($con, $userId){
-    $query = $con->prepare("SELECT * FROM Transactions WHERE userId=:id");
+    $query = $con->prepare("SELECT Transactions.transactionId as transactionId, Location.locationName as locationName, Transactions.datePaid as datePaid, Transactions.amount as amount FROM Transactions INNER JOIN Location ON Transactions.locationId=Location.locationId WHERE Transactions.userId=:id");
     $query->bindValue(":id", $userId);
     $query->execute();
 
@@ -101,17 +101,19 @@ function getAllTransactions($con){
     echo json_encode($response);
 }
 
-function insertTransaction($con, $gatewayId, $amount, $sessionId){
+function insertTransaction($con, $gatewayId, $amount, $sessionId, $userId, $locationId){
 
     global $errorArray;
 
     verifyProductPrice($amount);
 
     if(empty($errorArray)){
-        $query = $con->prepare("INSERT INTO Transactions (gatewayId, amount, sessionId) VALUES (:gi, :am, :si)");
+        $query = $con->prepare("INSERT INTO Transactions (gatewayId, amount, sessionId, userId, locationId) VALUES (:gi, :am, :si, :ui, :li)");
         $query->bindValue(":gi", $gatewayId);
         $query->bindValue(":am", $amount);
         $query->bindValue(":si", $sessionId);
+        $query->bindValue(":ui", $userId);
+        $query->bindValue(":li", $locationId);
 
         if($query->execute()){
             //Success
@@ -142,17 +144,19 @@ function insertTransaction($con, $gatewayId, $amount, $sessionId){
 
 }
 
-function updateTransaction($con, $transactionId, $gatewayId, $amount, $sessionId){
+function updateTransaction($con, $transactionId, $gatewayId, $amount, $sessionId, $userId, $locationId){
 
     global $errorArray;
 
     verifyProductPrice($amount);
 
     if(empty($errorArray)){
-        $query = $con->prepare("UPDATE Transactions SET gatewayId=:gi, amount=:am, sessionId=:si WHERE transactionId=:id");
+        $query = $con->prepare("UPDATE Transactions SET gatewayId=:gi, amount=:am, sessionId=:si, userId=:ui, locationId=:li WHERE transactionId=:id");
         $query->bindValue(":gi", $gatewayId);
         $query->bindValue(":am", $amount);
         $query->bindValue(":si", $sessionId);
+        $query->bindValue(":ui", $userId);
+        $query->bindValue(":li", $locationId);
         $query->bindValue(":id", $transactionId);
 
         if($query->execute()){
