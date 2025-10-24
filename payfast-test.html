@@ -1,0 +1,27 @@
+function payWithPayFast() {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://sandbox.payfast.co.za/eng/process';
+
+  const inputs = {
+    merchant_id: '10042960',
+    merchant_key: 'kpy3ngnar6f0d',
+    amount: '100.00',
+    item_name: 'PieParking Test',
+    m_payment_id: 'TEST123',
+    return_url: 'https://webhook.site/3eda104a-3894-4da0-ab1c-9d495966880c',
+    cancel_url: 'https://webhook.site/3eda104a-3894-4da0-ab1c-9d495966880c',
+    notify_url: 'https://webhook.site/3eda104a-3894-4da0-ab1c-9d495966880c'
+  };
+
+  for (let key in inputs) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = inputs[key];
+    form.appendChild(input);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+}
