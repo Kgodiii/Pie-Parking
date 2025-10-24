@@ -26,12 +26,12 @@ switch($requestMethod){
         break;
     case "POST":
         $data = json_decode(file_get_contents('php://input'), true);
-        insertLocation($con, $data["locationName"], $data["entryGateIP"], $data["exitGateIP"], $data["hourlyRate"]);
+        insertLocation($con, $data["locationName"], $data["hourlyRate"]);
         break;
     case "PUT":
         $locationId = $_GET["id"];
         $data = json_decode(file_get_contents('php://input'), true);
-        updateLocation($con, $locationId, $data["locationName"], $data["entryGateIP"], $data["exitGateIP"], $data["hourlyRate"]);
+        updateLocation($con, $locationId, $data["locationName"], $data["hourlyRate"]);
         break;
     case "DELETE":
         $locationId = $_GET["id"];
@@ -75,17 +75,15 @@ function getAllLocations($con){
     echo json_encode($response);
 }
 
-function insertLocation($con, $locationName, $entryGateIP, $exitGateIP, $hourlyRate){
+function insertLocation($con, $locationName, $hourlyRate){
 
     global $errorArray;
 
     verifyCurrencyValue($hourlyRate);
 
     if(empty($errorArray)){
-        $query = $con->prepare("INSERT INTO Location (locationName, entryGateIP, exitGateIP, hourlyRate) VALUES (:ln, :en, :ex, :hr)");
+        $query = $con->prepare("INSERT INTO Location (locationName, hourlyRate) VALUES (:ln, :hr)");
         $query->bindValue(":ln", $locationName);
-        $query->bindValue(":en", $entryGateIP);
-        $query->bindValue(":ex", $exitGateIP);
         $query->bindValue(":hr", $hourlyRate);
 
         if($query->execute()){
@@ -117,17 +115,15 @@ function insertLocation($con, $locationName, $entryGateIP, $exitGateIP, $hourlyR
 
 }
 
-function updateLocation($con, $locationId, $locationName, $entryGateIP, $exitGateIP, $hourlyRate){
+function updateLocation($con, $locationId, $locationName, $hourlyRate){
 
     global $errorArray;
 
     verifyCurrencyValue($hourlyRate);
 
     if(empty($errorArray)){
-        $query = $con->prepare("UPDATE Location SET locationName=:ln, entryGateIP=:en, exitGateIP=:ex, hourlyRate=:hr WHERE locationId=:id");
+        $query = $con->prepare("UPDATE Location SET locationName=:ln, hourlyRate=:hr WHERE locationId=:id");
         $query->bindValue(":ln", $locationName);
-        $query->bindValue(":en", $entryGateIP);
-        $query->bindValue(":ex", $exitGateIP);
         $query->bindValue(":hr", $hourlyRate);
         $query->bindValue(":id", $locationId);
 

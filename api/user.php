@@ -26,12 +26,16 @@ switch($requestMethod){
         break;
     case "POST":
         $data = json_decode(file_get_contents('php://input'), true);
-        insertUser($con, $data["name"], $data["surname"], $data["cellNumber"], $data["password"]);
+        if(isset($_GET["login"])){
+            loginUser($con, $data["username"], $data["password"]);
+        }else{
+            insertUser($con, $data["username"], $data["email"], $data["password"]);
+        }
         break;
     case "PUT":
         $userId = $_GET["id"];
         $data = json_decode(file_get_contents('php://input'), true);
-        updateUser($con, $userId, $data["name"], $data["surname"], $data["cellNumber"], $data["password"]);
+        updateUser($con, $userId, $data["username"], $data["email"], $data["password"]);
         break;
     case "DELETE":
         $userId = $_GET["id"];
@@ -71,19 +75,17 @@ function getAllUsers($con){
     echo json_encode($response);
 }
 
-function insertUser($con, $name, $surname, $cellNumber, $password){
+function insertUser($con, $username, $email, $password){
 
     global $errorArray;
 
-    verifyName($name);
-    verifySurname($surname);
-    verifyCell($cellNumber);
+    verifyUsername($username);
+    verifyEmail($email);
 
     if(empty($errorArray)){
-        $query = $con->prepare("INSERT INTO Users (name, surname, cellNumber, password) VALUES (:nm, :sn, :cn, :pw)");
-        $query->bindValue(":nm", $name);
-        $query->bindValue(":sn", $surname);
-        $query->bindValue(":cn", $cellNumber);
+        $query = $con->prepare("INSERT INTO Users (username, email, password) VALUES (:un, :em, :pw)");
+        $query->bindValue(":un", $username);
+        $query->bindValue(":em", $email);
         $query->bindValue(":pw", $password);
 
         if($query->execute()){
@@ -115,19 +117,49 @@ function insertUser($con, $name, $surname, $cellNumber, $password){
 
 }
 
-function updateUser($con, $userId, $name, $surname, $cellNumber, $password){
+function loginUser($con, $username, $password){
 
     global $errorArray;
 
-    verifyName($name);
-    verifySurname($surname);
-    verifyCell($cellNumber);
+    verifyUsername($username);
 
     if(empty($errorArray)){
-        $query = $con->prepare("UPDATE Users SET name=:nm, surname=:sn, cellNumber=:cn, password=:pw WHERE userId=:id");
-        $query->bindValue(":nm", $name);
-        $query->bindValue(":sn", $surname);
-        $query->bindValue(":cn", $cellNumber);
+
+        $query = $con->prepare("SELECT userId FROM Users WHERE username=:un AND password=:pw");
+        $query->bindValue(":un", $username);
+        $query->bindValue(":pw", $password);
+        $query->execute();
+
+        $response = array();
+
+        if($query->rowCount() == 1){
+
+            while($row = $query->fetch(PDO::FETCH_ASSOC)){
+                array_push($response, $row);
+            }
+
+        }else{
+            array_push($response, array("userId"=> -1));
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+
+    }
+
+}
+
+function updateUser($con, $userId, $username, $email, $password){
+
+    global $errorArray;
+
+    verifyUsername($username);
+    verifyEmail($email);
+
+    if(empty($errorArray)){
+        $query = $con->prepare("UPDATE Users SET username=:un, email=:em, password=:pw WHERE userId=:id");
+        $query->bindValue(":un", $username);
+        $query->bindValue(":em", $email);
         $query->bindValue(":pw", $password);
         $query->bindValue(":id", $userId);
 
@@ -186,19 +218,19 @@ function deleteUser($con, $userId){
 
 }
 
-function verifyName($name){
+function verifyUsername($username){
 
     global $errorArray;
 
-    $pattern = "/^[A-z\- ]*$/";
+    $pattern = "/^[A-z0-9\-\.]*$/";
 
-    if($name == "" || $name == null){
-        $errorMessage = "User name cannot be empty";
+    if($username == "" || $username == null){
+        $errorMessage = "Username cannot be empty";
         array_push($errorArray, $errorMessage);
-    }elseif(!preg_match($pattern, $name)){
+    }elseif(!preg_match($pattern, $username)){
         $errorMessage = "Invalid name";
         array_push($errorArray, $errorMessage);
-    }elseif(strlen($name) > 25){
+    }elseif(strlen($username) > 25){
         $errorMessage = "Name cannot be more than 25 characters";
         array_push($errorArray, $errorMessage);
     }else{
@@ -207,41 +239,19 @@ function verifyName($name){
 
 }
 
-function verifySurname($surname){
+function verifyEmail($email){
 
     global $errorArray;
 
-    $pattern = "/^[A-z\- ]*$/";
-
-    if($surname == "" || $surname == null){
+    if($email == "" || $email == null){
         $errorMessage = "User surname cannot be empty";
         array_push($errorArray, $errorMessage);
-    }elseif(!preg_match($pattern, $surname)){
-        $errorMessage = "Invalid surname";
+    }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $errorMessage = "Email invalid";
         array_push($errorArray, $errorMessage);
-    }elseif(strlen($surname) > 25){
-        $errorMessage = "Surname cannot be more than 25 characters";
-        array_push($errorArray, $errorMessage);
-    }else{
         return;
-    }
-
-}
-
-function verifyCell($cellNumber){
-
-    global $errorArray;
-
-    $pattern = "/^[0-9]+$/";
-
-    if($cellNumber == "" || $cellNumber == null){
-        $errorMessage = "User cell number cannot be empty";
-        array_push($errorArray, $errorMessage);
-    }elseif(!preg_match($pattern, $cellNumber)){
-        $errorMessage = "Invalid cell number";
-        array_push($errorArray, $errorMessage);
-    }elseif(strlen($cellNumber) > 10){
-        $errorMessage = "Cell number cannot be more than 10 characters";
+    }elseif(strlen($email) > 50){
+        $errorMessage = "Email cannot be more than 50 characters";
         array_push($errorArray, $errorMessage);
     }else{
         return;

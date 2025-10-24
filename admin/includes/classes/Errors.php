@@ -8,6 +8,14 @@ class Errors{
 
     public static $usernameExists = "This username is already in use, try another.";
 
+    public static $rateEmpty = "Location amount cannot be empty";
+
+    public static $rateInvalid = "Invalid amount";
+
+    public static $rateCharacters = "Amount cannot be more than 20 characters";
+
+    public static $invalidSession = "Session ID Not Found";
+
 }
 
 ?>

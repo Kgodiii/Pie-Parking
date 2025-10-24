@@ -36,11 +36,49 @@ h3 {
     font-family: "Poppins ExtraLight";
 }
 
+/* For Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* For Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+select{
+    padding: 6px;
+    border: none;
+    border-bottom: 2px solid #021431;
+    border-radius: 1px;
+    font-size: 18px;
+    font-family: "Poppins ExtraLight";
+    color: #021431;
+    min-width: 200px;
+}
+
+select:focus{
+    outline: none;
+}
+
 .errorMessage{
     padding: 4px;
     border-radius: 6px;
     background-color: #ff5751;
     color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+.successMessage{
+    padding: 4px;
+    border-radius: 6px;
+    background-color: #a4ff8e;
+    color: #021431;
     font-size: 12px;
     font-weight: bold;
     width: 100%;
@@ -89,11 +127,16 @@ h3 {
 .card{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
     padding: 30px;
+    margin: 20px;
     border-radius: 30px;
     background-color: #ffffff;
+}
+
+.stretch{
+    width: 100%;
 }
 
 .card h1{
@@ -119,4 +162,33 @@ h3 {
 
 .icon{
     width: 180px;
+}
+
+.topBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+    background-color: #021431;
+    box-shadow: 0px 2px 2px 3px #d4d4d4d4;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.spacer{
+    height: 160px;
+}
+
+.logo{
+    height: 100px;
+}
+
+.cardRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
