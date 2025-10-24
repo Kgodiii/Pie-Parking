@@ -3,7 +3,7 @@ A ticketless QR-code based parking system developed using Android Studio.
 
 ## Group Members
 - Kgodiso Buthelezi
-- Frano Myburgh
+- Franco Myburgh
 - Nyaniso Mbonelwa
 - Ethan Creswell
 - Relemongeng Malobola
@@ -13,3 +13,5 @@ A ticketless QR-code based parking system developed using Android Studio.
 - QR code scanner for entry/exit
 - Session tracking
 - Gate control integration
+
+
