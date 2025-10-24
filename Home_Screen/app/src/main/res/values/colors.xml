@@ -1,0 +1,10 @@
+<resources>
+    <!-- Primary Brand Colors -->
+    <color name="colorPrimary">#0A1A3F</color>      <!-- Dark Navy (header, button background) -->
+    <color name="colorAccent">#C3B4F5</color>       <!-- Light Lavender -->
+    <color name="colorPinkAccent">#F9C5D1</color>   <!-- Pink accent -->
+    <color name="colorLightPurple">#CDB5FF</color>  <!-- Pie chart accent -->
+    <color name="colorTextPrimary">#3A3A59</color>  <!-- Grayish Navy -->
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorBorder">#E5E5E5</color>
+</resources>
