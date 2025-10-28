@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Pie Parking app</string>
+    <string name="hamburger_menu_content_description" />
+    <string name="ic_pie_chart_logo" />
+    <string name="pie_chart_logo_content_description" />
+    <string name="user_avatar_content_description" />
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="forgot_password">forgot_password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="password_visibility_toggle_content_description">password_visibility_toggle_content_description</string>
+    <string name="email">Email</string>
+    <string name="sign_up">Sign up</string>
+    <string name="location">Location</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="add_card">Add card</string>
+    <string name="nickname_hint">Nickname</string>
+    <string name="security_cvv">Security CVV</string>
+    <string name="expiry_hint">Expiry</string>
+    <string name="card_number">Card Number</string>
+    <string name="card_details">Card Details</string>
+    <string name="card_holder">Card Holder</string>
+    <string name="card_numbers">Card Number</string>
+    <string name="back">Back</string>
+    <string name="select_country">Select Country</string>
+    <string name="save_card">Save Card</string>
+    <string name="security_notice">Security Notice</string>
+</resources>
