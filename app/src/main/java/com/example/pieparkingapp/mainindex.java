@@ -42,7 +42,7 @@ public class mainIndex extends AppCompatActivity {
 
     private void setupListeners() {
         addCardButton.setOnClickListener(v -> {
-            Intent intent = new Intent(mainIndex.this, PaymentMethodsActivity.class);
+            Intent intent = new Intent(mainIndex.this, PaymentMethodActivity.class);
             paymentMethodLauncher.launch(intent);
         });
 
