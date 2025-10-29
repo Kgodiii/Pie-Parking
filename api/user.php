@@ -130,16 +130,12 @@ function loginUser($con, $username, $password){
         $query->bindValue(":pw", $password);
         $query->execute();
 
-        $response = array();
-
         if($query->rowCount() == 1){
 
-            while($row = $query->fetch(PDO::FETCH_ASSOC)){
-                array_push($response, $row);
-            }
+            $response = $query->fetch(PDO::FETCH_ASSOC);
 
         }else{
-            array_push($response, array("userId"=> -1));
+            $response = array("userId"=> -1);
         }
 
         header('Content-Type: application/json');
